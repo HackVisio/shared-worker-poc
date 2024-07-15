@@ -34,6 +34,7 @@ if (!!window.SharedWorker) {
     // to the array inside worker.js and the worker has
     // sent his message back
     employeeWorker.port.onmessage = function (employees) {
+        console.log("in onmessage")
         console.log(employees);
         const employeeList = document.getElementById("employeeList");
         employeeList.innerHTML = "";

@@ -4,7 +4,7 @@ let ports = []
 let db;
 let dbReady = false;
 
-const DBOpenRequest = indexedDB.open("employees", 3);
+const DBOpenRequest = indexedDB.open("employees", 1);
 
 DBOpenRequest.onerror = (event) => {
     console.log("Error loading database")
@@ -24,6 +24,7 @@ const loadEmployees = () => {
     employeeObjectStoreData.onsuccess = (event) => {
         const data = event.target.result;
         console.log(data);
+        console.log("in loademployees")
         employees = data;
     }
 }
@@ -31,8 +32,8 @@ const loadEmployees = () => {
 DBOpenRequest.onupgradeneeded = (event) => {
     db = event.target.result;
     
-    if (!db.objectStoreNames.contains("employees")) {
-        console.log("empoyees exists already");
+    if (db.objectStoreNames.contains("employees")) {
+        console.log("empoyees object store exists already");
         return;
     }
     const objectStore = db.createObjectStore("employees", { keyPath: "lastName" });
@@ -72,6 +73,8 @@ onconnect = function (event) {
             port.postMessage(employees);
             return;
         }
+
+        console.log("past logging request")
 
         employees.push(e.data);
         console.log(employees);
